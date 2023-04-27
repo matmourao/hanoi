@@ -40,14 +40,31 @@ void desempilhar(Pilha* pilha)
 
 void printPilha(Pilha* pilha)
 {
+    if(pilha->top == nullptr)
+    {
+        cout << "Pilha vazia" << endl;
+        return;
+    }
+    
     Node* temp = pilha -> top;
-
     while(temp->next != nullptr)
     {
         cout << temp->iData << endl;
         temp = temp -> next;
     }
     cout << temp->iData << endl;
+}
+
+int lenghtPilha(Pilha* pilha)
+{
+    int i = 1;
+    Node* temp = pilha->top; 
+    while(temp->next != nullptr)
+    {
+        temp = temp->next;
+        i++;
+    }
+    return i;
 }
 
 void newTower(Pilha* torre, int iTamanho)
@@ -85,6 +102,19 @@ void moveHanoi(Pilha* torre1, Pilha* torre2)
     }
 }
 
+void winHanoi(Pilha* main, Pilha* target, Pilha* aux, int n)
+{
+    if(n == 0)
+    {
+        return;
+    }
+    
+    winHanoi(main, aux, target, n-1);
+    moveHanoi(main, target);
+    winHanoi(aux, target, main, n-1);
+    
+}
+
 
 int main()
 {
@@ -92,6 +122,7 @@ int main()
     Pilha* torre2 = newPilha();
     Pilha* torre3 = newPilha();
     newTower(torre1, 3);
+    
     printPilha(torre1);
     cout << "=======" << endl;
 
@@ -99,11 +130,17 @@ int main()
     moveHanoi(torre1, torre3);
     moveHanoi(torre2, torre3);
     moveHanoi(torre1, torre2);
+    
     moveHanoi(torre3, torre1);
     moveHanoi(torre3, torre2);
     moveHanoi(torre1, torre2);
 
     printPilha(torre2);
+    cout << "=======" << endl;
+
+    winHanoi(torre2, torre1, torre3, 3);
+
+    printPilha(torre1);
 
     return 0;
 }
